@@ -82,6 +82,28 @@ class TestFunctions(unittest.TestCase):
         self.assertEqual(last_segment.xcor(), new_position[0], "Segment X position is incorrect")
         self.assertEqual(last_segment.ycor(), new_position[1], "Segment Y position is incorrect")
 
+    def test_snake_body_movement(self):
+        """Test if the snake's body follows the head correctly"""
+
+        # Store initial positions
+        initial_positions = [(seg.xcor(), seg.ycor()) for seg in self.snake.segments]  
+
+        # Move forward once
+        self.snake.move()
+
+        # Check if the head moved correctly
+        head_x, head_y = initial_positions[0]
+        dx, dy = self.snake.direction_map[self.snake.direction]
+        expected_head_pos = (head_x + dx, head_y + dy)
+        self.assertEqual((self.snake.segments[0].xcor(), self.snake.segments[0].ycor()), expected_head_pos, "Head did not move correctly")
+
+        # Check if each body segment followed the one ahead
+        for i in range(1, len(self.snake.segments)):
+
+            # Each segment should be where the one ahead used to be
+            expected_pos = initial_positions[i - 1]  
+            self.assertEqual((self.snake.segments[i].xcor(), self.snake.segments[i].ycor()), expected_pos, f"Segment [{i}] did not follow correctly")
+
     def tearDown(self):
         """Tear down after each test"""
         pass
