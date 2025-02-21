@@ -1,5 +1,6 @@
 from turtle import Turtle, Screen
 from snake import Snake
+from food import Food
 
 # Variables / Config
 SCREEN_WIDTH = 500
@@ -31,21 +32,26 @@ def setup_controls(screen, snake):
     screen.onkey(lambda: snake.turn("left"), "a")
     screen.onkey(lambda: snake.turn("right"), "d")
 
-def game_loop(screen, snake):
+def game_loop(screen, snake, food):
     """Updates the game every 1 second."""
     screen.update()  # Refresh screen
     snake.move()
+
+    food.spawn( snake.get_snake_positions() )
     
     # Schedule the next update after 1000 ms (1 second)
-    screen.ontimer(lambda: game_loop(screen, snake), 500)
+    screen.ontimer(lambda: game_loop(screen, snake, food), 500)
 
 def main():
     screen = setup_game_window()
+    
     snake = Snake()
+    food = Food(GRID_SIZE, snake.mov_unit)
+
     setup_controls(screen, snake)
 
     # Start the game loop
-    game_loop(screen, snake)
+    game_loop(screen, snake, food)
 
     screen.mainloop()
 

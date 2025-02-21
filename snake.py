@@ -21,6 +21,9 @@ class Snake:
 
         self.create_snake(initial_segments)
 
+    def get_snake_positions(self):
+        return [(seg.xcor(), seg.ycor()) for seg in self.segments]
+
     def create_snake(self, initial_segments):
         """Creates the snake as a list of turtle segments"""
         start_positions = []
