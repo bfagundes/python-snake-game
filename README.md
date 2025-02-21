@@ -13,7 +13,7 @@ A classic Snake game implemented in Python using the Turtle module, following Te
 ## How to Run
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/YOUR_GITHUB_USERNAME/snake-game.git
+git clone https://github.com/bfagundes/python-snake-game.git
 cd snake-game
 ```
 
@@ -39,7 +39,7 @@ snake-game
  ├── test_main.py      # Tests for main game mechanics
  ├── test_snake.py     # Tests for snake behavior
  ├── test_food.py      # Tests for food spawning
- ├── README.md            # Documentation
+ ├── README.md         # Documentation
 ```
 
 ## Running Tests
