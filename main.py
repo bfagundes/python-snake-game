@@ -32,12 +32,30 @@ def setup_controls(screen, snake):
     screen.onkey(lambda: snake.turn("left"), "a")
     screen.onkey(lambda: snake.turn("right"), "d")
 
+def check_food_collision(snake, food, screen):
+    """Check if the snake eats the food, and respawn the food if necessary."""
+    if snake.segments[0].distance(food.food) < 15:
+        # Log and score
+        print("Food eaten! Score: x")
+
+        # Respawn food
+        food.spawn(snake.get_snake_positions()) 
+
+        # Grow snake
+        snake.add_segment(snake.segments[-1].position())
+
+        # Update the screen immediately
+        screen.update()
+
+        return True
+    else:
+        return False
+
 def game_loop(screen, snake, food):
     """Updates the game every 1 second."""
-    screen.update()  # Refresh screen
     snake.move()
-
-    food.spawn( snake.get_snake_positions() )
+    check_food_collision(snake, food, screen)
+    screen.update()
     
     # Schedule the next update after 1000 ms (1 second)
     screen.ontimer(lambda: game_loop(screen, snake, food), 500)

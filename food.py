@@ -17,6 +17,7 @@ class Food:
 
         # Store the last spawn
         self.spawn_position = (0,0)
+        self.food.goto(self.random_position())
         
     def random_position(self):
         """Generates a random position within the grid"""

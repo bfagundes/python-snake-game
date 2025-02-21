@@ -3,7 +3,7 @@ from snake import Snake
 
 class TestFunctions(unittest.TestCase):
     def setUp(self):
-        """Set up a new snake for each test"""
+        """Set up the test environment"""
         self.snake = Snake()
 
     def test_initial_position(self):

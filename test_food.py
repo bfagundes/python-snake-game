@@ -4,7 +4,7 @@ from snake import Snake
 
 class TestFunctions(unittest.TestCase):
     def setUp(self):
-        """Initialize a Food object before each test"""
+        """Set up the test environment"""
         self.grid_size = 250
         self.mov_unit = 20        
         self.food = Food(self.grid_size, self.mov_unit)
