@@ -15,33 +15,24 @@ class TestFunctions(unittest.TestCase):
         """Test if the snake starts with the correct initial direction"""
         self.assertEqual(self.snake.direction, "right")
 
-    def test_move_right(self):
-        """Test the snake movement to the right"""
-        self.snake.direction = "right"
-        expected_x = self.snake.x + self.snake.mov_unit
-        self.snake.move()
-        self.assertEqual(self.snake.x, expected_x)
+    def test_movement(self):
+        """Test the snake movement"""
+        movement_cases = {
+            "right": (self.snake.mov_unit, 0),   # Moves right by mov_unit
+            "left": (-self.snake.mov_unit, 0),   # Moves left by mov_unit
+            "up": (0, self.snake.mov_unit),      # Moves up by mov_unit
+            "down": (0, -self.snake.mov_unit)    # Moves down by mov_unit
+        }
 
-    def test_move_left(self):
-        """Test the snake movement to the left"""
-        self.snake.direction = "left"
-        expected_x = self.snake.x - self.snake.mov_unit
-        self.snake.move()
-        self.assertEqual(self.snake.x, expected_x)
-
-    def test_move_up(self):
-        """Test the snake movement up"""
-        self.snake.direction = "up"
-        expected_y = self.snake.y + self.snake.mov_unit
-        self.snake.move()
-        self.assertEqual(self.snake.y, expected_y)
-
-    def test_move_down(self):
-        """Test the snake movement down"""
-        self.snake.direction = "down"
-        expected_y = self.snake.y - self.snake.mov_unit
-        self.snake.move()
-        self.assertEqual(self.snake.y, expected_y)
+        for direction, (dx, dy) in movement_cases.items():
+            # Creating a subtest for each case
+            with self.subTest(direction = direction): 
+                self.snake.direction = direction
+                expected_x = self.snake.x + dx
+                expected_y = self.snake.y + dy
+                self.snake.move()
+                self.assertEqual(self.snake.x, expected_x, f"Snake did not move correctly in {direction}")
+                self.assertEqual(self.snake.y, expected_y, f"Snake did not move correctly in {direction}")
 
     def test_turn_restrictions(self):
         """Test that the snake only turns left/right, from pointing position"""
