@@ -1,8 +1,10 @@
+from turtle import Turtle
+
 class Snake:
 
     """Models the Snake object"""
-    def __init__(self, segments=3, x=0, y=0, direction="r"):
-        self.segments = 3
+    def __init__(self, initial_segments=3, x=0, y=0, direction="r"):
+        self.segments = []
         self.x = 0
         self.y = 0
         self.direction = "right"
@@ -16,14 +18,28 @@ class Snake:
             "down": (0, -self.mov_unit),
         }
 
-    def move(self):
-        # Get movement deltas (dx, dy) based on the current direction
-        # E.g. If self.direction == "right", the lookup returns (20, 0), so self.x increases by 20.
-        dx, dy = self.direction_map.get(self.direction, (0, 0))
+        self.create_snake(initial_segments)
 
-        # Update the snake's position
-        self.x += dx
-        self.y += dy
+    def create_snake(self, initial_segments):
+        """Creates the snake as a list of turtle segments"""
+        start_positions = []
+        offset = 0
+        for _ in range(initial_segments):
+            pos = (self.x - offset, self.y)
+            offset -= self.mov_unit
+            start_positions.append(pos)
+        
+        for position in start_positions:
+            self.add_segment(position)
+
+    def add_segment(self, position):
+        """Adds a segment to the snake"""
+        segment = Turtle()
+        segment.color("white")
+        segment.shape("square")
+        segment.penup()
+        segment.goto(position)
+        self.segments.append(segment)
 
     def turn(self, new_direction):
         """Prevent 180-degree turns"""
@@ -31,3 +47,9 @@ class Snake:
 
         if new_direction in ["left", "right", "up", "down"] and new_direction != opposite_directions[self.direction]:
             self.direction = new_direction
+
+    def move(self):
+        """Moves the Snake forward in the current direction"""
+        for i in range(0, len(self.segments), 1):
+            dx, dy = self.direction_map.get(self.direction, (0,0))
+            self.segments[i].goto(self.segments[i].xcor() + dx, self.segments[i].ycor() + dy)

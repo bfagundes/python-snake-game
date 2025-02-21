@@ -15,24 +15,33 @@ class TestFunctions(unittest.TestCase):
         """Test if the snake starts with the correct initial direction"""
         self.assertEqual(self.snake.direction, "right")
 
-    def test_movement(self):
-        """Test the snake movement"""
+    def test__head_movement(self):
+        """Test the Snake's Head movement"""
         movement_cases = {
-            "right": (self.snake.mov_unit, 0),   # Moves right by mov_unit
-            "left": (-self.snake.mov_unit, 0),   # Moves left by mov_unit
-            "up": (0, self.snake.mov_unit),      # Moves up by mov_unit
-            "down": (0, -self.snake.mov_unit)    # Moves down by mov_unit
+            "right": (self.snake.mov_unit, 0),
+            "left": (-self.snake.mov_unit, 0),
+            "up": (0, self.snake.mov_unit),
+            "down": (0, -self.snake.mov_unit)
         }
 
         for direction, (dx, dy) in movement_cases.items():
-            # Creating a subtest for each case
-            with self.subTest(direction = direction): 
+            with self.subTest(direction=direction): 
                 self.snake.direction = direction
-                expected_x = self.snake.x + dx
-                expected_y = self.snake.y + dy
+                
+                # Get initial position of the head
+                head = self.snake.segments[0]
+                initial_x, initial_y = head.xcor(), head.ycor()
+                
+                # Move the snake
                 self.snake.move()
-                self.assertEqual(self.snake.x, expected_x, f"Snake did not move correctly in {direction}")
-                self.assertEqual(self.snake.y, expected_y, f"Snake did not move correctly in {direction}")
+
+                # Expected new position
+                expected_x = initial_x + dx
+                expected_y = initial_y + dy
+
+                # Check if the head moved correctly
+                self.assertEqual(head.xcor(), expected_x, f"Snake did not move correctly in {direction}")
+                self.assertEqual(head.ycor(), expected_y, f"Snake did not move correctly in {direction}")
 
     def test_turn_restrictions(self):
         """Test that the snake only turns left/right, from pointing position"""
@@ -57,6 +66,21 @@ class TestFunctions(unittest.TestCase):
             self.snake.direction = start_direction
             self.snake.turn(opposite[start_direction])
             self.assertEqual(self.snake.direction, start_direction, f"Snake should not turn {opposite[start_direction]} from {start_direction}")
+
+    def test_add_segment(self):
+        """Test if a segment is correctly added to the snake"""
+        initial_length = len(self.snake.segments)  # Count segments before adding
+
+        new_position = (100, 100)  # Arbitrary position for testing
+        self.snake.add_segment(new_position)
+
+        # Check if the segment count increased by 1
+        self.assertEqual(len(self.snake.segments), initial_length + 1, "Segment was not added correctly")
+
+        # Check if the last segment was placed correctly
+        last_segment = self.snake.segments[-1]
+        self.assertEqual(last_segment.xcor(), new_position[0], "Segment X position is incorrect")
+        self.assertEqual(last_segment.ycor(), new_position[1], "Segment Y position is incorrect")
 
     def tearDown(self):
         """Tear down after each test"""
