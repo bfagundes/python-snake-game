@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 from snake import Snake
 from food import Food
 from turtle import Screen
@@ -9,7 +9,7 @@ from main import (
     is_game_over
 )
 
-class TestFoodCollision(unittest.TestCase):
+class TestMain(unittest.TestCase):
     def setUp(self):
         """Set up the test environment"""
         # Mocking screen to avoid actual rendering
@@ -43,15 +43,16 @@ class TestFoodCollision(unittest.TestCase):
         self.snake.segments[0].goto(self.grid_size + 20, 0)
         self.assertTrue(detect_wall_collision(self.snake), f"Snake collision with the wall was not detected")
 
-    def test_game_over(self):
+    @patch('main.detect_wall_collision')
+    def test_game_over(self, mock_detect_wall_collision):
         # Simulating a Snake self collision
         self.snake.detect_self_collision = Mock(return_value = True)
-        detect_wall_collision = Mock(return_value = False)
+        mock_detect_wall_collision.return_value = False
         self.assertTrue(is_game_over(self.snake), f"Game Over was not triggered on Snake self collision")
 
         # Simulating a Snake into Wall collision
         self.snake.detect_self_collision = Mock(return_value = False)
-        detect_wall_collision = Mock(return_value = True)
+        mock_detect_wall_collision.return_value = True
         self.assertTrue(is_game_over(self.snake), f"Game Over was not triggered on Snake into wall collision")
 
     def tearDown(self):
