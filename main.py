@@ -1,6 +1,7 @@
 from turtle import Turtle, Screen
 from snake import Snake
 from food import Food
+from score import Score
 
 # Variables / Config
 SCREEN_WIDTH = 500
@@ -32,11 +33,12 @@ def setup_controls(screen, snake):
     screen.onkey(lambda: snake.turn("left"), "a")
     screen.onkey(lambda: snake.turn("right"), "d")
 
-def check_food_collision(snake, food, screen):
+def check_food_collision(snake, food, screen, score):
     """Check if the snake eats the food, and respawn the food if necessary."""
     if snake.segments[0].distance(food.food) < 15:
         # Log and score
-        print("Food eaten! Score: x")
+        score.increment()
+        print(f"Food eaten! Current score: {score.current}")
 
         # Respawn food
         food.spawn(snake.get_positions()) 
@@ -59,30 +61,32 @@ def detect_wall_collision(snake):
 def is_game_over(snake):
     return detect_wall_collision(snake) or snake.detect_self_collision()
 
-def game_loop(screen, snake, food):
+def game_loop(screen, snake, food, score):
     """Updates the game every 1 second."""
     snake.move()
-    check_food_collision(snake, food, screen)
+    check_food_collision(snake, food, screen, score)
 
     screen.update()
 
     if is_game_over(snake):
         print(f"Game Over!")
+        score.reset()
         return
     
     # Schedule the next update after 1000 ms (1 second)
-    screen.ontimer(lambda: game_loop(screen, snake, food), 500)
+    screen.ontimer(lambda: game_loop(screen, snake, food, score), 500)
 
 def main():
     screen = setup_game_window()
     
+    score = Score()
     snake = Snake()
     food = Food(GRID_SIZE, snake.mov_unit)
 
     setup_controls(screen, snake)
 
     # Start the game loop
-    game_loop(screen, snake, food)
+    game_loop(screen, snake, food, score)
 
     screen.mainloop()
 
