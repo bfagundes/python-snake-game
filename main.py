@@ -39,10 +39,10 @@ def check_food_collision(snake, food, screen):
         print("Food eaten! Score: x")
 
         # Respawn food
-        food.spawn(snake.get_snake_positions()) 
+        food.spawn(snake.get_positions()) 
 
         # Grow snake
-        snake.add_segment(snake.segments[-1].position())
+        snake.grow()
 
         # Update the screen immediately
         screen.update()

@@ -21,7 +21,7 @@ class Snake:
 
         self.create_snake(initial_segments)
 
-    def get_snake_positions(self):
+    def get_positions(self):
         return [(seg.xcor(), seg.ycor()) for seg in self.segments]
 
     def create_snake(self, initial_segments):
@@ -50,6 +50,9 @@ class Snake:
         segment.penup()
         segment.goto(position)
         self.segments.append(segment)
+
+    def grow(self):
+        self.add_segment(self.segments[-1].position())
 
     def turn(self, new_direction):
         """Prevent 180-degree turns"""
