@@ -53,7 +53,6 @@ class TestFunctions(unittest.TestCase):
         }
 
         for start_direction, allowed in valid_turns.items():
-            
             # Testing each allowed turn
             for turn in allowed:
                 self.snake.direction = start_direction

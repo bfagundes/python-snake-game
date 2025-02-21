@@ -37,7 +37,7 @@ def game_loop(screen, snake):
     snake.move()
     
     # Schedule the next update after 1000 ms (1 second)
-    screen.ontimer(lambda: game_loop(screen, snake), 1000)
+    screen.ontimer(lambda: game_loop(screen, snake), 500)
 
 def main():
     screen = setup_game_window()
