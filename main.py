@@ -50,12 +50,25 @@ def check_food_collision(snake, food, screen):
         return True
     else:
         return False
+    
+def detect_wall_collision(snake):
+    """Checks if the snake has collided with the wall"""
+    head = snake.get_head()
+    return not (-GRID_SIZE <= head.xcor() <= GRID_SIZE and -GRID_SIZE <= head.ycor() <= GRID_SIZE)
+
+def is_game_over(snake):
+    return detect_wall_collision(snake) or snake.detect_self_collision()
 
 def game_loop(screen, snake, food):
     """Updates the game every 1 second."""
     snake.move()
     check_food_collision(snake, food, screen)
+
     screen.update()
+
+    if is_game_over(snake):
+        print(f"Game Over!")
+        return
     
     # Schedule the next update after 1000 ms (1 second)
     screen.ontimer(lambda: game_loop(screen, snake, food), 500)

@@ -23,6 +23,9 @@ class Snake:
 
     def get_positions(self):
         return [(seg.xcor(), seg.ycor()) for seg in self.segments]
+    
+    def get_head(self):
+        return self.segments[0]
 
     def create_snake(self, initial_segments):
         """Creates the snake as a list of turtle segments"""
@@ -78,3 +81,12 @@ class Snake:
         for i in range(len(self.segments) - 1, 0, -1):
             # Move to previous segment's old position
             self.segments[i].goto(segment_pos_log[i - 1]) 
+
+    def detect_self_collision(self):
+        """Checks if the snake has collided with itself"""
+        head = self.segments[0]
+        body_positions = [(seg.xcor(), seg.ycor()) for seg in self.segments[1:]]
+
+        return (head.xcor(), head.ycor()) in body_positions
+    
+    
